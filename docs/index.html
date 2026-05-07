@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SID A5 — Tabla de Puntajes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .trophy {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .autor {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        /* Estado de carga */
+        .loading {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 40px;
+            font-size: 1rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #e94560;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tabla */
+        .tabla {
+            list-style: none;
+        }
+
+        .fila {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .fila:hover {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Top 3 especiales */
+        .fila.top1 {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .fila.top2 {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(192, 192, 192, 0.05));
+            border-color: rgba(192, 192, 192, 0.3);
+        }
+
+        .fila.top3 {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(205, 127, 50, 0.05));
+            border-color: rgba(205, 127, 50, 0.3);
+        }
+
+        .posicion {
+            font-size: 1.2rem;
+            font-weight: 700;
+            width: 50px;
+            text-align: center;
+        }
+
+        .fila.top1 .posicion { color: #ffd700; }
+        .fila.top2 .posicion { color: #c0c0c0; }
+        .fila.top3 .posicion { color: #cd7f32; }
+        .fila:not(.top1):not(.top2):not(.top3) .posicion { color: rgba(255,255,255,0.4); }
+
+        .info {
+            flex: 1;
+            margin-left: 12px;
+        }
+
+        .username {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .score {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .puntos {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e94560;
+        }
+
+        .fila.top1 .puntos { color: #ffd700; }
+        .fila.top2 .puntos { color: #c0c0c0; }
+        .fila.top3 .puntos { color: #cd7f32; }
+
+        /* Sin datos */
+        .empty {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            font-size: 0.95rem;
+        }
+
+        /* Botón refrescar */
+        .btn-refresh {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid rgba(233, 69, 96, 0.4);
+            border-radius: 10px;
+            color: #e94560;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: rgba(233, 69, 96, 0.35);
+        }
+
+        .ultima-actualizacion {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.75rem;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="trophy">🏆</div>
+        <h1>Tabla de Puntajes</h1>
+        <p>SID — Actividad 5: Firebase + Unity</p>
+        <p class="autor">Daniel Esteban Ardila Alzate</p>
+    </div>
+
+    <div id="contenido">
+        <div class="loading">
+            <div class="spinner"></div>
+            Cargando puntajes...
+        </div>
+    </div>
+
+    <button class="btn-refresh" onclick="cargarTabla()">🔄 Refrescar</button>
+    <p class="ultima-actualizacion" id="ultimaActualizacion"></p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB1iyFUyZD4RyCtxygEARezBX2bQv3gIjc",
+        authDomain: "sid-a5-firebase-unity.firebaseapp.com",
+        databaseURL: "https://sid-a5-firebase-unity-default-rtdb.firebaseio.com",
+        projectId: "sid-a5-firebase-unity",
+        storageBucket: "sid-a5-firebase-unity.firebasestorage.app",
+        messagingSenderId: "596949217061",
+        appId: "1:596949217061:web:5ab6de9edb97d1d5bb74cc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Hacer la función global para que el botón pueda llamarla
+    window.cargarTabla = async function() {
+        const contenido = document.getElementById('contenido');
+        const ultimaActualizacion = document.getElementById('ultimaActualizacion');
+
+        contenido.innerHTML = `
+            <div class="loading">
+                <div class="spinner"></div>
+                Cargando puntajes...
+            </div>
+        `;
+
+        try {
+            const snapshot = await get(ref(db, 'usuarios'));
+
+            if (!snapshot.exists()) {
+                contenido.innerHTML = `
+                    <div class="empty">
+                        😔 No hay puntajes registrados todavía.
+                    </div>
+                `;
+                return;
+            }
+
+            // Convertir los datos a array y ordenar por score
+            const usuarios = [];
+            snapshot.forEach(child => {
+                const data = child.val();
+                usuarios.push({
+                    username: data.username || 'Desconocido',
+                    score: data.score || 0
+                });
+            });
+
+            usuarios.sort((a, b) => b.score - a.score);
+
+            // Generar el HTML de la tabla
+            if (usuarios.length === 0) {
+                contenido.innerHTML = `<div class="empty">No hay puntajes aún.</div>`;
+                return;
+            }
+
+            const medallas = ['🥇', '🥈', '🥉'];
+            const clases = ['top1', 'top2', 'top3'];
+
+            let html = '<ul class="tabla">';
+            usuarios.forEach((u, i) => {
+                const clase = i < 3 ? clases[i] : '';
+                const posicion = i < 3 ? medallas[i] : `#${i + 1}`;
+                html += `
+                    <li class="fila ${clase}">
+                        <span class="posicion">${posicion}</span>
+                        <div class="info">
+                            <div class="username">${u.username}</div>
+                            <div class="score">Puntaje más alto</div>
+                        </div>
+                        <span class="puntos">${u.score} pts</span>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+
+            contenido.innerHTML = html;
+
+            // Mostrar hora de última actualización
+            const ahora = new Date();
+            ultimaActualizacion.textContent = `Última actualización: ${ahora.toLocaleTimeString()}`;
+
+        } catch (error) {
+            contenido.innerHTML = `
+                <div class="empty">
+                    ❌ Error al cargar los datos.<br>
+                    <small>${error.message}</small>
+                </div>
+            `;
+        }
+    };
+
+    // Cargar al iniciar
+    cargarTabla();
+</script>
+
+</body>
+</html>
