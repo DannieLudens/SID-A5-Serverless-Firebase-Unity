@@ -304,4 +304,4 @@ docs/
 
 La tabla de puntajes también es accesible desde el navegador en GitHub Pages usando el **Firebase SDK para JavaScript**.
 
-Ver tabla: `https://DannieLudens.github.io/SID-A5-Serverless-Firebase-Unity/`
+Ver tabla: [Click Aqui](https://dannieludens.github.io/SID-A5-Serverless-Firebase-Unity/)
