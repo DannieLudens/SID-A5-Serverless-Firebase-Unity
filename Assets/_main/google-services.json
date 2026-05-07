@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "596949217061",
+    "firebase_url": "https://sid-a5-firebase-unity-default-rtdb.firebaseio.com",
+    "project_id": "sid-a5-firebase-unity",
+    "storage_bucket": "sid-a5-firebase-unity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596949217061:android:7eebbe7a9aafda11bb74cc",
+        "android_client_info": {
+          "package_name": "com.upb.sidTest202601"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkKFE-suihskQh2yMPC9jUy4jtqN3dGaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
